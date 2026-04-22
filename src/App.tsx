@@ -41,16 +41,17 @@ export default function App() {
 
   // Telegram Deadline Checker
   useEffect(() => {
-    if (!state.settings.tgToken || !state.settings.tgChatId) return;
+    if (!state.settings || !state.settings.tgToken || !state.settings.tgChatId) return;
 
     const checkDeadlines = async () => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      const tasksToNotify = state.tasks.filter(t => !t.completed && !t.tgSent);
+      const safeTasks = state.tasks || [];
+      const tasksToNotify = safeTasks.filter(t => !t.completed && !t.tgSent);
       
       let updated = false;
-      const newTasks = [...state.tasks];
+      const newTasks = [...safeTasks];
 
       for (let i = 0; i < newTasks.length; i++) {
         const task = newTasks[i];

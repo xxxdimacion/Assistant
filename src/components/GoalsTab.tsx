@@ -11,19 +11,30 @@ export default function GoalsTab({ state, setState }: { state: AppState, setStat
   const [activeModal, setActiveModal] = useState<ModalConfig | null>(null);
   const [editTargetModal, setEditTargetModal] = useState<ModalConfig | null>(null);
 
-  const currentMonthName = state.settings.currentMonthName || 'Май';
-  const goalsMay = state.goalsMay || {
+  const currentMonthName = state.settings?.currentMonthName || 'Май';
+  const rawGoalsMay = state.goalsMay || {
     income: { target: 50000, current: 0 },
     subscribers: { target: 5000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } },
     views: { target: 500000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } },
     salesTraff: { target: 50, current: 0 }
   };
   
-  if (!goalsMay.views) {
-    goalsMay.views = { target: 500000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } };
-  }
+  const goalsMay = {
+    ...rawGoalsMay,
+    views: rawGoalsMay.views || { target: 500000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } }
+  };
 
-  const goalsYear = state.goals;
+  const rawGoalsYear = state.goals || {
+    income: { target: 100000, current: 0 },
+    subscribers: { target: 10000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } },
+    salesTraff: { target: 100, current: 0 }
+  };
+
+  const goalsYear = {
+    ...rawGoalsYear,
+    income: rawGoalsYear.income || { target: 100000, current: 0 },
+    subscribers: rawGoalsYear.subscribers || { target: 10000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } }
+  };
 
   return (
     <div className="pt-2 pb-6 space-y-8">

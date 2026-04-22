@@ -3,10 +3,10 @@ import { X, Bot, BellRing, DownloadCloud } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SettingsModal({ state, setState, onClose }: { state: AppState, setState: (v: any) => void, onClose: () => void }) {
-  const [token, setToken] = useState(state.settings.tgToken);
-  const [chatId, setChatId] = useState(state.settings.tgChatId);
-  const [budget, setBudget] = useState(state.budget.toString());
-  const [currentMonthName, setCurrentMonthName] = useState(state.settings.currentMonthName || 'Май');
+  const [token, setToken] = useState(state.settings?.tgToken || '');
+  const [chatId, setChatId] = useState(state.settings?.tgChatId || '');
+  const [budget, setBudget] = useState(state.budget?.toString() || '0');
+  const [currentMonthName, setCurrentMonthName] = useState(state.settings?.currentMonthName || 'Май');
   const [testStatus, setTestStatus] = useState<string | null>(null);
 
   const handleExport = () => {
@@ -25,9 +25,9 @@ export default function SettingsModal({ state, setState, onClose }: { state: App
   const handleSave = () => {
     setState((prev: AppState) => ({
       ...prev,
-      budget: parseInt(budget, 10) || prev.budget,
+      budget: parseInt(budget, 10) || prev.budget || 0,
       settings: {
-        ...prev.settings,
+        ...(prev.settings || {}),
         tgToken: token,
         tgChatId: chatId,
         currentMonthName

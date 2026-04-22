@@ -66,7 +66,8 @@ export default function TasksTab({ state, setState }: { state: AppState, setStat
     return Infinity;
   };
 
-  const sortedTasks = [...state.tasks].sort((a, b) => {
+  const safeTasks = state.tasks || [];
+  const sortedTasks = [...safeTasks].sort((a, b) => {
     if (a.completed !== b.completed) return a.completed ? 1 : -1;
     
     const dateA = parseDate(a.deadline);
@@ -86,7 +87,7 @@ export default function TasksTab({ state, setState }: { state: AppState, setStat
         <h2 className="m-0 mb-6 text-xl font-bold flex items-center gap-3 relative z-10">
           Задачи 
           <span className="bg-accent neon-glow text-[#0A0A0A] px-2 py-0.5 rounded-full text-xs font-bold fluid-trans">
-            {state.tasks.filter(t => !t.completed).length}
+            {safeTasks.filter(t => !t.completed).length}
           </span>
         </h2>
         
@@ -139,7 +140,7 @@ export default function TasksTab({ state, setState }: { state: AppState, setStat
             ))}
           </AnimatePresence>
 
-          {state.tasks.length === 0 && (
+          {safeTasks.length === 0 && (
             <div className="flex flex-col items-center justify-center p-6 text-[var(--color-text-dim)]">
               <p className="m-0">Нет задач</p>
             </div>

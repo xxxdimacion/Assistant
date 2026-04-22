@@ -39,15 +39,16 @@ export default function MoneyTab({ state, setState }: { state: AppState, setStat
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const daysRemaining = daysInMonth - today.getDate() + 1; // Includes today
 
-  const thisMonthExpenses = state.money.filter(m => {
+  const safeMoney = state.money || [];
+  const thisMonthExpenses = safeMoney.filter(m => {
     const d = new Date(m.date);
     return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
   });
 
   const spentThisMonth = thisMonthExpenses.reduce((acc, m) => acc + m.amount, 0);
-  const progressPercent = Math.min((spentThisMonth / state.budget) * 100, 100);
+  const progressPercent = Math.min((spentThisMonth / (state.budget || 1)) * 100, 100);
   
-  const remaining = Math.max(state.budget - spentThisMonth, 0);
+  const remaining = Math.max((state.budget || 0) - spentThisMonth, 0);
   const dailyAverage = daysRemaining > 0 ? Math.round(remaining / daysRemaining) : remaining;
 
   return (
@@ -62,7 +63,7 @@ export default function MoneyTab({ state, setState }: { state: AppState, setStat
         <div className="flex justify-between items-center mb-2 font-medium text-sm relative z-10">
           <span className="text-[var(--color-text-dim)]">Бюджет:</span>
           <span>
-            {spentThisMonth.toLocaleString('ru-RU')} ₽ <span className="text-[var(--color-text-dim)]">/ {state.budget.toLocaleString('ru-RU')} ₽</span>
+            {spentThisMonth.toLocaleString('ru-RU')} ₽ <span className="text-[var(--color-text-dim)]">/ {(state.budget || 0).toLocaleString('ru-RU')} ₽</span>
           </span>
         </div>
 

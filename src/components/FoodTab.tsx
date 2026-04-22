@@ -41,14 +41,15 @@ export default function FoodTab({ state, setState }: { state: AppState, setState
   };
 
   const todayStr = new Date().toDateString();
-  const todayFood = state.food.filter(f => new Date(f.date).toDateString() === todayStr);
+  const safeFood = state.food || [];
+  const todayFood = safeFood.filter(f => new Date(f.date).toDateString() === todayStr);
   const sumTodayKcal = todayFood.reduce((acc, f) => acc + f.kcal, 0);
   const sumTodayProtein = todayFood.reduce((acc, f) => acc + (f.protein || 0), 0);
 
   // Avg 7 days
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const last7DaysFood = state.food.filter(f => new Date(f.date) >= sevenDaysAgo);
+  const last7DaysFood = safeFood.filter(f => new Date(f.date) >= sevenDaysAgo);
   const sum7Days = last7DaysFood.reduce((acc, f) => acc + f.kcal, 0);
   const sum7DaysProtein = last7DaysFood.reduce((acc, f) => acc + (f.protein || 0), 0);
   const uniqueDays = new Set(last7DaysFood.map(f => new Date(f.date).toDateString())).size;
@@ -57,7 +58,7 @@ export default function FoodTab({ state, setState }: { state: AppState, setState
 
   const groupedFood = useMemo(() => {
     const groups: Record<string, FoodEntry[]> = {};
-    const sorted = [...state.food].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const sorted = [...safeFood].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
     sorted.forEach(item => {
       const d = new Date(item.date);
@@ -68,7 +69,7 @@ export default function FoodTab({ state, setState }: { state: AppState, setState
       groups[dateKey].push(item);
     });
     return groups;
-  }, [state.food]);
+  }, [safeFood]);
 
   return (
     <div className="pt-2 pb-6 space-y-6">
@@ -91,7 +92,7 @@ export default function FoodTab({ state, setState }: { state: AppState, setState
 
         <div className="relative z-10">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            История питания <span className="bg-accent neon-glow text-[#0A0A0A] px-2 py-0.5 rounded-full text-xs font-bold">{state.food.length}</span>
+            История питания <span className="bg-accent neon-glow text-[#0A0A0A] px-2 py-0.5 rounded-full text-xs font-bold">{safeFood.length}</span>
           </h3>
           <div className="flex flex-col gap-4">
             {Object.keys(groupedFood).length === 0 && <p className="text-[var(--color-text-dim)] text-sm m-0 py-2">Пока ничего не добавлено.</p>}
