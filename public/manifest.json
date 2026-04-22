@@ -7,9 +7,10 @@
   "theme_color": "#F0947D",
   "icons": [
     {
-      "src": "https://api.iconify.design/lucide:bot.svg?color=%23F0947D",
-      "sizes": "192x192",
-      "type": "image/svg+xml"
+      "src": "/logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
