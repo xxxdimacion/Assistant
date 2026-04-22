@@ -3,7 +3,7 @@ import { AppState, GoalSource } from '../types';
 import { Plus, Edit2 } from 'lucide-react';
 import { motion } from 'motion/react';
 
-type GoalType = 'income' | 'subscribers' | 'views' | 'salesTraff';
+type GoalType = 'income' | 'subscribers' | 'salesTraff' | 'views';
 type Timeframe = 'year' | 'may';
 type ModalConfig = { type: GoalType, timeframe: Timeframe };
 
@@ -11,7 +11,7 @@ export default function GoalsTab({ state, setState }: { state: AppState, setStat
   const [activeModal, setActiveModal] = useState<ModalConfig | null>(null);
   const [editTargetModal, setEditTargetModal] = useState<ModalConfig | null>(null);
 
-  // Fallbacks for older cached state
+  const currentMonthName = state.settings.currentMonthName || 'Май';
   const goalsMay = state.goalsMay || {
     income: { target: 50000, current: 0 },
     subscribers: { target: 5000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } },
@@ -19,6 +19,10 @@ export default function GoalsTab({ state, setState }: { state: AppState, setStat
     salesTraff: { target: 50, current: 0 }
   };
   
+  if (!goalsMay.views) {
+    goalsMay.views = { target: 500000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } };
+  }
+
   const goalsYear = state.goals;
 
   return (
@@ -28,7 +32,7 @@ export default function GoalsTab({ state, setState }: { state: AppState, setStat
         {/* Spatial glowing background blob */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-[60px] pointer-events-none transform translate-x-1/2 -translate-y-1/2" />
 
-        <h2 className="m-0 mb-5 text-xl font-bold flex items-center relative z-10">Май</h2>
+        <h2 className="m-0 mb-5 text-xl font-bold flex items-center relative z-10">{currentMonthName}</h2>
         
         <div className="flex flex-col gap-4 relative z-10">
           <GoalCard 
@@ -97,15 +101,6 @@ export default function GoalsTab({ state, setState }: { state: AppState, setStat
             onEditTarget={() => setEditTargetModal({type: 'subscribers', timeframe: 'year'})}
           />
 
-          <GoalCard 
-            title="Просмотры видео" 
-            target={goalsYear.views.target} 
-            current={goalsYear.views.current} 
-            suffix="просм."
-            sources={goalsYear.views.sources}
-            onAdd={() => setActiveModal({type: 'views', timeframe: 'year'})}
-            onEditTarget={() => setEditTargetModal({type: 'views', timeframe: 'year'})}
-          />
         </div>
       </div>
 
@@ -203,6 +198,9 @@ function GoalAddModal({ config, state, setState, onClose }: { config: ModalConfi
       if (!targetGroup.salesTraff) {
         targetGroup.salesTraff = { target: timeframe === 'may' ? 50 : 100, current: 0 };
       }
+      if (!targetGroup.views && timeframe === 'may') {
+        targetGroup.views = { target: 500000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } };
+      }
 
       if (type === 'income' || type === 'salesTraff') {
         targetGroup[type] = {
@@ -293,6 +291,9 @@ function GoalEditTargetModal({ config, state, setState, onClose }: { config: Mod
 
       if (!updatedGroup.salesTraff) {
         updatedGroup.salesTraff = { target: timeframe === 'may' ? 50 : 100, current: 0 };
+      }
+      if (!updatedGroup.views && timeframe === 'may') {
+        updatedGroup.views = { target: 500000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0 } };
       }
 
       updatedGroup[type].target = val;

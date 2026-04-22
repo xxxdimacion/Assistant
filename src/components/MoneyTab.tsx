@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AppState, MoneyEntry } from '../types';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 
 export default function MoneyTab({ state, setState }: { state: AppState, setState: (v: any) => void }) {
   const [title, setTitle] = useState('');
@@ -26,8 +26,18 @@ export default function MoneyTab({ state, setState }: { state: AppState, setStat
     setIsAdding(false);
   };
 
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
+  const deleteExpense = (id: string) => {
+    setState((prev: AppState) => ({
+      ...prev,
+      money: prev.money.filter(m => m.id !== id)
+    }));
+  };
+
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const daysRemaining = daysInMonth - today.getDate() + 1; // Includes today
 
   const thisMonthExpenses = state.money.filter(m => {
     const d = new Date(m.date);
@@ -38,7 +48,7 @@ export default function MoneyTab({ state, setState }: { state: AppState, setStat
   const progressPercent = Math.min((spentThisMonth / state.budget) * 100, 100);
   
   const remaining = Math.max(state.budget - spentThisMonth, 0);
-  const dailyAverage = Math.round(remaining / 30);
+  const dailyAverage = daysRemaining > 0 ? Math.round(remaining / daysRemaining) : remaining;
 
   return (
     <div className="pt-2 pb-6 space-y-6">
@@ -70,7 +80,7 @@ export default function MoneyTab({ state, setState }: { state: AppState, setStat
             <p className="font-bold text-lg m-0 text-white truncate max-w-[120px]">{remaining.toLocaleString('ru-RU')} ₽</p>
           </div>
           <div className="text-right">
-            <p className="text-[var(--color-text-dim)] text-[11px] uppercase tracking-wider font-bold mb-1 m-0">На день (~30 дн)</p>
+            <p className="text-[var(--color-text-dim)] text-[11px] uppercase tracking-wider font-bold mb-1 m-0">Доступно на сегодня</p>
             <p className="font-bold text-lg m-0 text-white truncate max-w-[120px]">{dailyAverage.toLocaleString('ru-RU')} ₽</p>
           </div>
         </div>
@@ -82,9 +92,14 @@ export default function MoneyTab({ state, setState }: { state: AppState, setStat
           <div className="flex flex-col">
             {thisMonthExpenses.length === 0 && <p className="text-[var(--color-text-dim)] text-sm m-0 py-2">Пока ничего не добавлено.</p>}
             {thisMonthExpenses.map(m => (
-              <div key={m.id} className="flex justify-between items-center py-3 border-b border-white/5 last:border-0">
+              <div key={m.id} className="flex justify-between items-center py-3 border-b border-white/5 last:border-0 group">
                 <span className="text-[15px]">{m.title}</span>
-                <span className="text-[15px] font-medium text-[var(--color-text-dim)]">-{m.amount.toLocaleString('ru-RU')} ₽</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-[15px] font-medium text-[var(--color-text-dim)]">-{m.amount.toLocaleString('ru-RU')} ₽</span>
+                  <button onClick={() => deleteExpense(m.id)} className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-red-500/80 hover:text-red-500 bg-transparent border-none p-1 cursor-pointer fluid-trans transition-opacity active:scale-90">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

@@ -6,6 +6,7 @@ export default function SettingsModal({ state, setState, onClose }: { state: App
   const [token, setToken] = useState(state.settings.tgToken);
   const [chatId, setChatId] = useState(state.settings.tgChatId);
   const [budget, setBudget] = useState(state.budget.toString());
+  const [currentMonthName, setCurrentMonthName] = useState(state.settings.currentMonthName || 'Май');
   const [testStatus, setTestStatus] = useState<string | null>(null);
 
   const handleExport = () => {
@@ -26,8 +27,10 @@ export default function SettingsModal({ state, setState, onClose }: { state: App
       ...prev,
       budget: parseInt(budget, 10) || prev.budget,
       settings: {
+        ...prev.settings,
         tgToken: token,
-        tgChatId: chatId
+        tgChatId: chatId,
+        currentMonthName
       }
     }));
     onClose();
@@ -102,6 +105,17 @@ export default function SettingsModal({ state, setState, onClose }: { state: App
               value={budget}
               onChange={e => setBudget(e.target.value)}
               placeholder="50000"
+              className="w-full bg-black/30 text-white px-4 py-4 rounded-[16px] outline-none border border-white/10 focus:border-accent/50 text-sm fluid-trans placeholder-white/30"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs text-[var(--color-text-dim)] ml-1 mb-1 block">Текущий месяц (для целей)</label>
+            <input 
+              type="text" 
+              value={currentMonthName}
+              onChange={e => setCurrentMonthName(e.target.value)}
+              placeholder="Например, Май"
               className="w-full bg-black/30 text-white px-4 py-4 rounded-[16px] outline-none border border-white/10 focus:border-accent/50 text-sm fluid-trans placeholder-white/30"
             />
           </div>

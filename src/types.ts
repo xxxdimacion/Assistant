@@ -11,6 +11,7 @@ export type FoodEntry = {
   id: string;
   title: string;
   kcal: number;
+  protein?: number;
   date: string; // ISO string 
 };
 
@@ -49,18 +50,18 @@ export type AppState = {
   goals: {
     income: { target: number; current: number; };
     subscribers: GoalStats;
-    views: GoalStats;
     salesTraff?: { target: number; current: number; };
   };
   goalsMay?: {
     income: { target: number; current: number; };
     subscribers: GoalStats;
-    views: GoalStats;
+    views?: GoalStats;
     salesTraff: { target: number; current: number; };
   };
   customGoalSections?: CustomGoalSection[];
   settings: {
     tgToken: string;
     tgChatId: string;
+    currentMonthName?: string;
   }
 };

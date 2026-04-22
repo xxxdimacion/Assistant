@@ -38,3 +38,9 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+
+img, svg {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+  transform: translateZ(0);
+}

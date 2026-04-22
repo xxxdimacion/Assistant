@@ -58,11 +58,23 @@ export default function TasksTab({ state, setState }: { state: AppState, setStat
     return 'bg-green-500'; // Default is green
   };
 
+  const parseDate = (dStr: string) => {
+    const parts = dStr.split('.');
+    if (parts.length === 3) {
+      return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10)).getTime();
+    }
+    return Infinity;
+  };
+
   const sortedTasks = [...state.tasks].sort((a, b) => {
     if (a.completed !== b.completed) return a.completed ? 1 : -1;
-    const priorityWeight = { red: 3, orange: 2, green: 1, undefined: 1 };
-    // @ts-ignore
-    return (priorityWeight[b.priority] || 1) - (priorityWeight[a.priority] || 1);
+    
+    const dateA = parseDate(a.deadline);
+    const dateB = parseDate(b.deadline);
+    if (dateA !== dateB) return dateA - dateB;
+
+    const priorityWeight: Record<string, number> = { red: 3, orange: 2, green: 1 };
+    return (priorityWeight[b.priority || 'green'] || 1) - (priorityWeight[a.priority || 'green'] || 1);
   });
 
   return (
