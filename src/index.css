@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-main: #0B0B0C;
+  --color-bg-card: #141416;
+  --color-accent: #FF5E00;
+  --color-text-dim: #999999;
+}
+
+.glass-panel {
+  background: rgba(22, 22, 24, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.fluid-trans {
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.neon-glow {
+  box-shadow: 0 0 16px rgba(255, 94, 0, 0.25);
+}
+
+body {
+  background-color: var(--color-bg-main);
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
