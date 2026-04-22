@@ -116,18 +116,11 @@ export default function App() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto px-6 pb-32 relative flex flex-col">
-        <div className="flex-1">
-          {activeTab === 'tasks' && <TasksTab state={state} setState={setState} />}
-          {activeTab === 'food' && <FoodTab state={state} setState={setState} />}
-          {activeTab === 'money' && <MoneyTab state={state} setState={setState} />}
-          {activeTab === 'goals' && <GoalsTab state={state} setState={setState} />}
-        </div>
-        
-        {/* Logo Footer */}
-        <footer className="w-full flex justify-center py-6 mt-4 opacity-70">
-          <img src="https://i.ibb.co/R44v9v4z/Frame-43172.jpg" alt="Logo" className="w-[48px] h-[48px] object-cover rounded-[16px] shadow-lg grayscale transition-all duration-300 hover:grayscale-0 hover:scale-105" referrerPolicy="no-referrer" />
-        </footer>
+      <main className="flex-1 overflow-y-auto px-6 pb-24 relative">
+        {activeTab === 'tasks' && <TasksTab state={state} setState={setState} />}
+        {activeTab === 'food' && <FoodTab state={state} setState={setState} />}
+        {activeTab === 'money' && <MoneyTab state={state} setState={setState} />}
+        {activeTab === 'goals' && <GoalsTab state={state} setState={setState} />}
       </main>
 
       {/* Floating Pill Tab Bar */}

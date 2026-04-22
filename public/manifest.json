@@ -7,15 +7,15 @@
   "theme_color": "#F0947D",
   "icons": [
     {
-      "src": "https://i.ibb.co/z9Cbc6Q/logo.png",
+      "src": "https://i.ibb.co/R44v9v4z/Frame-43172.jpg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "https://i.ibb.co/z9Cbc6Q/logo.png",
+      "src": "https://i.ibb.co/R44v9v4z/Frame-43172.jpg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ]

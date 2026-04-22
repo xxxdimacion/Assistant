@@ -212,6 +212,10 @@ function GoalAddModal({ config, state, setState, onClose }: { config: ModalConfi
       if (!targetGroup.views && timeframe === 'may') {
         targetGroup.views = { target: 500000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0, 'TikTok ADS': 0, 'Meta ADS': 0 } };
       }
+      
+      if (!targetGroup[type]) {
+        targetGroup[type] = { target: 0, current: 0, sources: {} };
+      }
 
       if (type === 'income' || type === 'salesTraff') {
         targetGroup[type] = {
@@ -279,7 +283,7 @@ function GoalAddModal({ config, state, setState, onClose }: { config: ModalConfi
 function GoalEditTargetModal({ config, state, setState, onClose }: { config: ModalConfig, state: AppState, setState: (v: any) => void, onClose: () => void }) {
   const { type, timeframe } = config;
   const key = timeframe === 'may' ? 'goalsMay' : 'goals';
-  const targetGroup = state[key] || state.goals;
+  const targetGroup = state[key] || state.goals || {};
   
   // Safe fallback to prevent crashes if salesTraff wasn't initialized in old state
   const currentTarget = targetGroup[type]?.target || 0;
@@ -305,6 +309,10 @@ function GoalEditTargetModal({ config, state, setState, onClose }: { config: Mod
       }
       if (!updatedGroup.views && timeframe === 'may') {
         updatedGroup.views = { target: 500000, current: 0, sources: { 'Threads': 0, 'YouTube Shorts': 0, 'Reels': 0, 'TikTok': 0 } };
+      }
+
+      if (!updatedGroup[type]) {
+        updatedGroup[type] = { target: 0, current: 0 };
       }
 
       updatedGroup[type].target = val;
